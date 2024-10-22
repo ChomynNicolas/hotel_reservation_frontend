@@ -16,18 +16,18 @@ export const RoomsPage = () => {
   const dispatch = useDispatch();
   const rooms = useSelector((state: RootState) => state.rooms.rooms);
   useEffect(() => {
-    axios
-      .get<Rooms[]>("http://127.0.0.1:5000/api/rooms")
-      .then((response) => dispatch(setRooms(response.data)))
-      .catch((error) => console.log(error));
-  }, [dispatch]);
+    
+    if(!rooms || rooms.length === 0){
+      axios
+        .get<Rooms[]>("http://127.0.0.1:5000/api/rooms")
+        .then((response) => dispatch(setRooms(response.data)))
+        .catch((error) => console.log(error));
+    }
+  }, [dispatch,rooms]);
 
   return (
     <>
-      <div
-        className="relative overflow-x-auto shadow-md sm:rounded-lg "
-        style={{ width: "1000px" }}
-      >
+      
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -65,7 +65,7 @@ export const RoomsPage = () => {
             )}
           </tbody>
         </table>
-      </div>
+      
     </>
   );
 };

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { NavBar } from "./components/navbar/NavBar";
 import { RoomsPage } from "./pages/RoomsPage";
 import ReservationPage from "./pages/ReservationPage";
+import { UserReservationsPage } from "./pages/UserReservationsPage";
 
 function App() {
   
@@ -35,7 +36,7 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
-      <div className="flex flex-col items-center justify-center mt-32">
+      <div className="flex flex-col items-center justify-center mt-32 xl:mx-60">
       <div className="flex flex-col">
         {/* Progreso de desplazamiento */}
         <div
@@ -53,6 +54,7 @@ function App() {
         <Route path="/register" element={<UserRegister />} />
         <Route path="/rooms" element={<RoomsPage/>}/>
         <Route path="/reservation/:id" element={<ReservationPage/>}/>
+        <Route path="/user/reservations" element={<UserReservationsPage/>}/>
       </Routes>
     </div>
     </BrowserRouter>
