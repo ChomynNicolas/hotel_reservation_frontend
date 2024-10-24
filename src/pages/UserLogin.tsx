@@ -2,7 +2,8 @@ import axios from "axios";
 import clsx from "clsx";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 
 type Inputs = {
   email: string;
@@ -12,54 +13,60 @@ type Inputs = {
 interface ApiResponse {
   access_token?: string;
   error?: string;
+  role?: string;
 }
 
-
-
 export const UserLogin = () => {
-  const [loginMessage, setLoginMessage] = useState("")
+  const [loginMessage, setLoginMessage] = useState("");
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async(data) => {
-    
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const response = await axios.post<ApiResponse>("http://127.0.0.1:5000/api/login", data);
-      if(response.data.access_token){
-        localStorage.setItem('accessToken', response.data.access_token);
+      const response = await axios.post<ApiResponse>(
+        "http://127.0.0.1:5000/api/login",
+        data
+      );
+      if (response.data.access_token) {
+        localStorage.setItem("accessToken", response.data.access_token);
+
         navigate("/");
       }
     } catch (error) {
-      
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          
-          console.error('Error en la respuesta:', error.response.data);
-          setLoginMessage(error.response.data.error || 'Ocurrió un error en el servidor');
+          console.error("Error en la respuesta:", error.response.data);
+          setLoginMessage(
+            error.response.data.error || "Ocurrió un error en el servidor"
+          );
         } else if (error.request) {
-          
-          console.error('Error en la solicitud, no hay respuesta del servidor:', error.request);
-          setLoginMessage('No hay respuesta del servidor. Intenta nuevamente más tarde.');
+          console.error(
+            "Error en la solicitud, no hay respuesta del servidor:",
+            error.request
+          );
+          setLoginMessage(
+            "No hay respuesta del servidor. Intenta nuevamente más tarde."
+          );
         } else {
-          
-          console.error('Error al configurar la solicitud:', error.message);
-          setLoginMessage('Error al enviar la solicitud. Verifica tu conexión a internet.');
+          console.error("Error al configurar la solicitud:", error.message);
+          setLoginMessage(
+            "Error al enviar la solicitud. Verifica tu conexión a internet."
+          );
         }
       } else {
-        
-        console.error('Error desconocido:', error);
-        setLoginMessage('Ocurrió un error inesperado. Intenta nuevamente.');
+        console.error("Error desconocido:", error);
+        setLoginMessage("Ocurrió un error inesperado. Intenta nuevamente.");
       }
     }
-
   };
 
   return (
     <>
-      <div className="font-sans text-gray-900 antialiased">
+      <div className="w-full font-sans text-gray-900 antialiased m-0">
         <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[#f8f4f3]">
           <div>
             <a href="/">
@@ -79,8 +86,6 @@ export const UserLogin = () => {
                   <span className="text-2xl font-semibold">Iniciar Sesión</span>
                 </center>
               </div>
-
-              
 
               <div className="my-2">
                 <label
@@ -122,13 +127,13 @@ export const UserLogin = () => {
                   )}
                 </div>
               </div>
-              {((loginMessage.length > 0)&&(!(errors.email || errors.password))) ? (
-                  <span className="text-sm font-semibold text-red-500">
-                    {loginMessage}
-                  </span>
-                ) : (
-                  ""
-                )}
+              {loginMessage.length > 0 && !(errors.email || errors.password) ? (
+                <span className="text-sm font-semibold text-red-500">
+                  {loginMessage}
+                </span>
+              ) : (
+                ""
+              )}
 
               <div className="block mt-4">
                 <label htmlFor="remember_me" className="flex items-center">
@@ -142,20 +147,20 @@ export const UserLogin = () => {
                 </label>
               </div>
 
-              <div className="flex items-center justify-end mt-4">
-                <a
-                  className="hover:underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  href="{{ route('password.request') }}"
-                >
-                  Olvidaste la contraseña ?
-                </a>
-
+              <div className="flex items-center justify-center mt-4">
                 <button
                   type="submit"
                   className="ms-4 inline-flex items-center px-4 py-2 bg-[#f84525] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                 >
                   Iniciar Sesión
                 </button>
+                <p className="mx-2">-</p>
+                <Link
+                  className="hover:underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  to={"/register"}
+                >
+                  Registrarse
+                </Link>
               </div>
             </form>
           </div>

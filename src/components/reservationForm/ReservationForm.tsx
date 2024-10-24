@@ -72,7 +72,7 @@ export default function ReservationForm({
   ) => {
     try {
       if (dateError || !checkIn || !checkOut) {
-        console.log("Por favor, seleccione fechas válidas");
+        setDateError("Por favor, seleccione fechas válidas");
         return;
       }
 
@@ -183,6 +183,7 @@ export default function ReservationForm({
     }
   };
   return (
+    <div className="flex flex-col items-center justify-center mt-32 mx-8 xl:mx-60">
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle>{type}</CardTitle>
@@ -285,6 +286,8 @@ export default function ReservationForm({
           Reservar
         </Button>
       </CardFooter>
+      <p className="text-center mb-2 text-sm font-semibold text-gray-600">*Al reservar no se aplicara ningun cargo</p>
     </Card>
+    </div>
   );
 }

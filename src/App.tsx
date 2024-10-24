@@ -1,64 +1,67 @@
-
-import {
-  BrowserRouter,
-  
-  Route,
-  Routes,
-} from "react-router-dom";
-import './App.css'
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import "./App.css";
 import { HomePage } from "./pages/HomePage";
 import { UserLogin } from "./pages/UserLogin";
 import { UserRegister } from "./pages/UserRegister";
-import { useEffect, useState } from "react";
 import { NavBar } from "./components/navbar/NavBar";
 import { RoomsPage } from "./pages/RoomsPage";
 import ReservationPage from "./pages/ReservationPage";
 import { UserReservationsPage } from "./pages/UserReservationsPage";
+import { AdminRoomsPage } from "./pages/AdminRoomsPage";
+import { ProtectedRoute } from "./components/protectedRoute/ProtectedRoute";
 
-function App() {
+
+function AppLayout() {
+
   
-  const [percent, setPercent] = useState(0);
 
-  // Función para actualizar el progreso de scroll
-  const handleScroll = () => {
-    const scrollTop = window.pageYOffset;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercent = (scrollTop / docHeight) * 100;
-    setPercent(scrollPercent);
-  };
+  const location = useLocation();
 
-  // Efecto para registrar el evento de scroll
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // Rutas donde no se muestra el NavBar
+  const hideNavBarPaths = ["/login", "/register"];
+
+  const shouldShowNavBar = !hideNavBarPaths.includes(location.pathname);
+
   return (
-    <BrowserRouter>
-      <div className="flex flex-col items-center justify-center mt-32 xl:mx-60">
-      <div className="flex flex-col">
-        {/* Progreso de desplazamiento */}
-        <div
-          className="fixed inset-x-0 top-0 z-50 h-0.5 mt-0.5 bg-blue-500"
-          style={{ width: `${percent}%` }}
-        ></div>
-
-        {/* nav bar */}
-        <NavBar/>
-      </div>
+    <>
+      {/* Mostrar el NavBar solo si no está en las rutas de login o register */}
+      {shouldShowNavBar && (
+        <div className="flex flex-col">
+          <NavBar />
+        </div>
+      )}
 
       <Routes>
+        {/* Rutas accesibles para todos */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<UserLogin />} />
         <Route path="/register" element={<UserRegister />} />
-        <Route path="/rooms" element={<RoomsPage/>}/>
-        <Route path="/reservation/:id" element={<ReservationPage/>}/>
-        <Route path="/user/reservations" element={<UserReservationsPage/>}/>
+        <Route path="/rooms" element={<RoomsPage />} />
+
+        {/* Rutas protegidas para Admin */}
+        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+          <Route path="/admin/rooms" element={<AdminRoomsPage />} />
+        </Route>
+
+        {/* Rutas protegidas para Usuarios */}
+        <Route element={<ProtectedRoute allowedRoles={["guest", "admin"]} />}>
+          <Route path="/reservation/:id" element={<ReservationPage />} />
+          <Route
+            path="/user/reservations"
+            element={<UserReservationsPage />}
+          />
+        </Route>
       </Routes>
-    </div>
-    </BrowserRouter>
-  )
+    </>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
+  );
+}
+
+export default App;

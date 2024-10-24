@@ -2,8 +2,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import { RoomList } from "../components/roomList/RoomList";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { setRooms } from "@/redux/roomsSlice";
+import { fetchUserRole } from "@/redux/fetchUserRole";
 
 export interface Rooms {
   id: string;
@@ -13,7 +14,14 @@ export interface Rooms {
 }
 
 export const RoomsPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+  
+    dispatch(fetchUserRole());
+  }, [dispatch]);
+
+
   const rooms = useSelector((state: RootState) => state.rooms.rooms);
   useEffect(() => {
     
@@ -26,7 +34,7 @@ export const RoomsPage = () => {
   }, [dispatch,rooms]);
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center mt-32 mx-8 xl:mx-60">
       
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -61,11 +69,11 @@ export const RoomsPage = () => {
                 </tr>
               </>
             ) : (
-              rooms.map((rooms, index) => <RoomList {...rooms} key={index} />)
+              rooms.map((rooms, index) => <RoomList {...rooms} key={index} isAdmin={false} />)
             )}
           </tbody>
         </table>
       
-    </>
+    </div>
   );
 };
