@@ -11,6 +11,7 @@ export interface Rooms {
   number: string;
   type: string;
   price: string;
+  status?: string;
 }
 
 export const RoomsPage = () => {
@@ -24,20 +25,27 @@ export const RoomsPage = () => {
 
   const rooms = useSelector((state: RootState) => state.rooms.rooms);
   useEffect(() => {
-    
-    if(!rooms || rooms.length === 0){
+    if (!rooms || rooms.length === 0) {
       axios
         .get<Rooms[]>("http://127.0.0.1:5000/api/rooms")
-        .then((response) => dispatch(setRooms(response.data)))
+        .then((response) => {
+          
+          const sortedRooms = response.data.sort((a, b) => {
+            return parseInt(a.number) - parseInt(b.number);
+          });
+          const filterRooms = sortedRooms.filter((room) =>room.status === "available")
+          dispatch(setRooms(filterRooms));
+        })
         .catch((error) => console.log(error));
     }
-  }, [dispatch,rooms]);
+  }, [dispatch, rooms]);
 
   return (
-    <div className="flex flex-col items-center justify-center mt-32 mx-8 xl:mx-60">
+    <div className="flex flex-col items-center justify-center mt-32 mx-8 xl:mx-60 ">
       
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <h3 className="text-3xl font-bold my-2">Habitaciones</h3>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-700 ">
+          <thead className="text-xs text-gray-50 uppercase bg-[#0c0a29]">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Tipo

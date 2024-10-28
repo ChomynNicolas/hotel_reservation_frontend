@@ -22,7 +22,7 @@ interface Props {
   selectedRoomId?: string | null; // El id de la habitación seleccionada
   setSelectedRoomId?: (id: string) => void;
   setEditing?: (editing: boolean) => void;
-  updateRoomStatus:(id:string,newStatus:string)=> void;
+  updateRoomStatus?:(id:string,newStatus:string)=> void;
 }
 
 const roomImage = {
@@ -76,10 +76,10 @@ export const RoomList = ({
   return (
     <tr
       className={clsx(
-        "border-b dark:bg-gray-800 dark:border-gray-700",
+        "border-b",
         selectedRoomId === id
           ? "bg-green-200"
-          : "bg-white hover:bg-gray-50 dark:hover:bg-gray-600"
+          : "bg-white hover:bg-yellow-50 "
       )}
     >
       <th

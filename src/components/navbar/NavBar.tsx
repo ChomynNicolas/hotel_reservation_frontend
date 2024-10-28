@@ -6,16 +6,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { FaUserAlt } from "react-icons/fa";
 
-
 const navItems = [
-  { title: "Habitaciones", url: "/rooms", roles: ["guest", "admin",undefined] },
+  {
+    title: "Habitaciones",
+    url: "/rooms",
+    roles: ["guest", "admin", undefined],
+  },
   {
     title: "Mis reservaciones",
     url: "/user/reservations",
     roles: ["guest", "admin"],
   },
   { title: "Habitaciones Admin", url: "/admin/rooms", roles: ["admin"] },
-  { title: "Usuarios", url: "/admin/users", roles: ["admin"] },
   { title: "Reservaciones", url: "/admin/reservations", roles: ["admin"] },
 ];
 
@@ -24,25 +26,21 @@ export const NavBar = () => {
   const role = useSelector((state: RootState) => state.role.role);
   const token = localStorage.getItem("accessToken");
 
-  
-  const onCloseSession = () =>{
-    localStorage.removeItem("accessToken")
-    navigate('/')
-
-  }
-  
-  
+  const onCloseSession = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/");
+  };
 
   return (
     <>
       {/* Navbar */}
-      <nav className="flex justify-around py-4 bg-white/80 backdrop-blur-md shadow-md w-full fixed top-0 left-0 right-0 z-10">
+      <nav className="flex justify-around py-4 bg-[#3c55ef] backdrop-blur-md shadow-md w-full fixed top-0 left-0 right-0 z-10">
         {/* Logo */}
         <div className="flex items-center">
           <Link to={"/"} className="cursor-pointer">
             <h3 className="text-2xl font-medium text-blue-500">
               <img
-                className="h-24 object-cover"
+                className="h-10 lg:h-24 object-cover  "
                 src="/hotel_logo.png"
                 alt="Store Logo"
               />
@@ -61,30 +59,31 @@ export const NavBar = () => {
 
         {/* Sección de Iconos y Registro/Login */}
         <div className="flex items-center justify-end  space-x-5">
-          {!(token !== null) ? (
+          {!(token !== null && !(role === undefined)) ? (
             <>
               <Link
                 to={"/register"}
-                className="flex text-gray-600 items-center hover:text-blue-500 cursor-pointer transition-colors duration-300"
+                className="flex text-xs lg:text-base text-gray-300 items-center hover:text-[#efd63c] cursor-pointer hover:underline  transition-colors duration-300"
               >
-                <PiUserCircleGearBold size={30} className="mx-1" />
+                <PiUserCircleGearBold size={25} className="mx-1" />
                 Registrarse
               </Link>
 
               <Link
                 to={"/login"}
-                className="flex text-gray-600 items-center hover:text-blue-500 cursor-pointer transition-colors duration-300"
+                className="flex text-xs lg:text-base text-gray-300 items-center hover:text-[#efd63c] cursor-pointer hover:underline  transition-colors duration-300"
               >
-                <IoLogInOutline size={30} className="mx-1" />
+                <IoLogInOutline size={25} className="mx-1" />
                 Iniciar Sesión
               </Link>
             </>
           ) : (
             <>
               <FaUserAlt size={30} />
-              <button 
-              onClick={onCloseSession}
-              className="text-sm font-medium text-blue-500 dark:text-blue-400 hover:underline cursor-pointer">
+              <button
+                onClick={onCloseSession}
+                className="text-xs lg:text-base font-medium text-[#efd63c] dark:text-[#efd63c] hover:underline cursor-pointer"
+              >
                 Cerrar Sesión
               </button>
             </>

@@ -29,6 +29,19 @@ interface ApiResponse {
   message?: string;
 }
 
+const roomImages = {
+  "Standard": "https://hotelmolinodeviento.co/wp-content/uploads/2021/01/HABITACION-SENCILLA-1-1024x768.jpg",
+  "Deluxe": "https://preciadoshotel.com/wp-content/uploads/2019/12/O2A8576.jpg",
+  "Suite": "https://images.mirai.com/HOST/500255/room-24672.jpg",
+  "Penthouse": "https://s3.abcstatics.com/media/MM/2017/10/27/hotel-president-wilson-habitacion-tres-kvwC--1333x900@abc.jpg",
+  // Add more room types and their corresponding image paths as needed
+};
+
+
+
+
+
+
 export default function ReservationForm({
   type,
   number,
@@ -183,8 +196,15 @@ export default function ReservationForm({
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center mt-32 mx-8 xl:mx-60">
-    <Card className="w-full max-w-lg mx-auto">
+    <div className="flex flex-col md:flex-row items-start justify-center mt-36 mx-8 xl:mx-60 gap-8">
+      <div className="w-full md:w-1/3">
+        <img
+          src={roomImages[type as keyof typeof roomImages] || roomImages.Standard}
+          alt={`${type} room`}
+          className="rounded-lg object-cover w-full h-auto md:h-[340px]"
+        />
+      </div>
+    <Card className="w-full md:w-2/3 max-w-lg">
       <CardHeader>
         <CardTitle>{type}</CardTitle>
         <CardDescription>

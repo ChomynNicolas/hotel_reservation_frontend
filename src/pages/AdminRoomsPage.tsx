@@ -14,7 +14,7 @@ export interface Rooms {
 export const AdminRoomsPage = () => {
   const [rooms, setRooms] = useState<Rooms[]>([]);
 
-  const [editRoom, setEditRoom] = useState<Rooms | null>(null); // Estado para manejar la habitación en edición
+  const [editRoom, setEditRoom] = useState<Rooms | null>(null); 
   const [editing, setEditing] = useState<boolean>(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
@@ -29,7 +29,7 @@ export const AdminRoomsPage = () => {
 
   console.log(rooms)
 
-  // Función para manejar el envío del formulario de edición
+  
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editRoom) {
@@ -45,12 +45,12 @@ export const AdminRoomsPage = () => {
                 room.id === editRoom.id ? response.data : room
               )
             );
-            setEditRoom(null); // Limpiar el formulario después de editar
+            setEditRoom(null); 
             setSelectedRoomId(null);
           })
           .catch((error) => console.log(error));
       } else {
-        // Si estamos creando una nueva habitación
+        
         axios
           .post(`http://127.0.0.1:5000/api/rooms`, editRoom)
           .then((response) => {
@@ -82,7 +82,7 @@ export const AdminRoomsPage = () => {
       <form onSubmit={handleEditSubmit} className="mb-4">
         <h2 className="text-lg font-bold mb-2">Formulario Habitación</h2>
         <div className="flex items-center justify-center grid-cols-3 gap-4">
-          {/* Cambiamos el input de texto por un select */}
+          
           <select
             value={editRoom?.type || ""}
             onChange={(e) =>
@@ -130,8 +130,8 @@ export const AdminRoomsPage = () => {
         </div>
       </form>
 
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-700 ">
+        <thead className="text-xs text-gray-50 uppercase bg-[#0c0a29]">
           <tr>
             <th scope="col" className="px-6 py-3">
               Tipo
@@ -141,6 +141,9 @@ export const AdminRoomsPage = () => {
             </th>
             <th scope="col" className="px-6 py-3">
               Precio
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <span className="sr-only">Acciones</span>
             </th>
             <th scope="col" className="px-6 py-3">
               <span className="sr-only">Acciones</span>
@@ -166,8 +169,8 @@ export const AdminRoomsPage = () => {
                 {...room}
                 key={index}
                 isAdmin={true}
-                setEditRoom={setEditRoom} // Pasamos la función para manejar la edición
-                selectedRoomId={selectedRoomId} // Pasamos el id de la habitación seleccionada
+                setEditRoom={setEditRoom} 
+                selectedRoomId={selectedRoomId} 
                 setSelectedRoomId={setSelectedRoomId}
                 setEditing={setEditing}
                 updateRoomStatus={updateRoomStatus}

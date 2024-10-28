@@ -9,6 +9,7 @@ import ReservationPage from "./pages/ReservationPage";
 import { UserReservationsPage } from "./pages/UserReservationsPage";
 import { AdminRoomsPage } from "./pages/AdminRoomsPage";
 import { ProtectedRoute } from "./components/protectedRoute/ProtectedRoute";
+import { AdmiReserPage } from "./pages/AdmiReserPage";
 
 
 function AppLayout() {
@@ -41,6 +42,7 @@ function AppLayout() {
         {/* Rutas protegidas para Admin */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="/admin/rooms" element={<AdminRoomsPage />} />
+          <Route path="/admin/reservations" element={<AdmiReserPage/>} />
         </Route>
 
         {/* Rutas protegidas para Usuarios */}
